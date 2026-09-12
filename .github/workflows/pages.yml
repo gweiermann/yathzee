@@ -1,4 +1,4 @@
-name: Publish Kniffel to GitHub Pages
+name: Publish Yathzee to GitHub Pages
 
 on:
   push:
@@ -32,6 +32,9 @@ jobs:
           cp .nojekyll index.html manifest.webmanifest sw.js dist/
           cp app-*.js styles-*.css dist/
           cp icons/icon-192.png icons/icon-512.png icons/icon-maskable-512.png icons/apple-touch-icon.png dist/icons/
+          # Remove legacy product branding from all user-facing deployed text while
+          # preserving internal score/storage keys so existing games remain compatible.
+          sed -i 's/Kniffel/Yathzee/g' dist/index.html dist/manifest.webmanifest dist/app-*.js
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
