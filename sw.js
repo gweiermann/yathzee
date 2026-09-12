@@ -1,0 +1,5 @@
+const CACHE_NAME='kniffel-shell-gh-v1';
+const APP_SHELL=["./","./index.html","./styles-0.css","./styles-1.css","./styles-2.css","./styles-3.css","./styles-4.css","./app-0.js","./app-1.js","./app-2.js","./app-3.js","./app-4.js","./manifest.webmanifest","./icons/icon-192.png","./icons/icon-512.png","./icons/icon-maskable-512.png","./icons/apple-touch-icon.png"];
+self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE_NAME).then(c=>c.addAll(APP_SHELL)).then(()=>self.skipWaiting())));
+self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==CACHE_NAME).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));
+self.addEventListener('fetch',e=>{const r=e.request;if(r.method!=='GET')return;const u=new URL(r.url);if(u.origin!==self.location.origin)return;e.respondWith(fetch(r).then(res=>{if(res.ok)caches.open(CACHE_NAME).then(c=>c.put(r,res.clone()));return res;}).catch(async()=>{const c=await caches.match(r);if(c)return c;if(r.mode==='navigate')return(await caches.match('./index.html'))||(await caches.match('./'));throw new Error('Offline and resource is not cached');}));});

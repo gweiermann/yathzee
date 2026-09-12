@@ -1,0 +1,37 @@
+{
+  "id": "./",
+  "name": "Kniffel – Würfel & Zettel",
+  "short_name": "Kniffel",
+  "description": "Kniffel wie am Küchentisch – mit Würfeln, gemeinsamem Zettel und lokalem Spielstand.",
+  "lang": "de",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f4efe5",
+  "theme_color": "#f4efe5",
+  "categories": [
+    "games"
+  ],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

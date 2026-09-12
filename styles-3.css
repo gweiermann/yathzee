@@ -1,0 +1,235 @@
+@media (max-width: 365px) {
+  .screen { padding-left: 14px; padding-right: 14px; }
+  .bottom-action, .turn-actions { padding-left: 14px; padding-right: 14px; }
+  .status-card { padding: 7px; }
+  .status-row { gap: 3px; }
+  .status-chip { font-size: .58rem; min-height: 38px; border-radius: 9px; }
+  .die { width: 50px; padding: 9px; }
+  .pip.shown::after { width: 6px; height: 6px; }
+}
+
+@media (min-width: 700px) {
+  body { padding: 24px 0; }
+  .screen { min-height: calc(100svh - 48px); border-radius: 34px; background: rgba(244,239,229,.65); box-shadow: 0 24px 80px rgba(59,47,29,.12); overflow: hidden; }
+  .bottom-action { bottom: 24px; }
+  .turn-actions { bottom: 24px; padding-bottom: 77px; }
+  .score-drawer { bottom: 24px; border-bottom: 1px solid #d1c7b8; border-radius: 25px; height: min(82svh, 760px); }
+}
+
+/* Unified analog score sheet — used during play and at the end. */
+.paper-drawer-body { padding-left: 12px; padding-right: 12px; display: flex; flex-direction: column; overflow: hidden; }
+.paper-mode-line {
+  min-height: 34px;
+  margin: 0 2px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: .76rem;
+  font-weight: 700;
+}
+.paper-mode-line .drawer-cancel { padding: 5px 0; }
+.paper-table-scroll {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  border: 1.5px solid #9e9486;
+  border-radius: 5px;
+  background: #fffaf0;
+  box-shadow: 0 7px 20px rgba(61,50,34,.07), inset 0 1px 0 rgba(255,255,255,.8);
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.paper-score-table {
+  width: max-content;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: #27332d;
+  font-size: .78rem;
+  user-select: none;
+}
+.paper-score-table th,
+.paper-score-table td {
+  box-sizing: border-box;
+  height: 42px;
+  padding: 3px 4px;
+  border-right: 1px solid rgba(88,77,62,.38);
+  border-bottom: 1px solid rgba(88,77,62,.38);
+}
+.paper-score-table tr > *:last-child { border-right: 0; }
+.paper-score-table tbody tr:last-child > * { border-bottom: 0; }
+.paper-score-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 6;
+  height: 42px;
+  background: #eee7d9;
+  font-size: .72rem;
+  font-weight: 850;
+  text-align: center;
+  line-height: 1.05;
+  vertical-align: middle;
+}
+.paper-score-table .category-head,
+.paper-score-table .category-cell {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  width: 78px;
+  min-width: 78px;
+  max-width: 78px;
+  text-align: left;
+  box-shadow: 2px 0 0 rgba(88,77,62,.16);
+}
+.paper-score-table .category-head { top: 0; z-index: 9; background: #e7dfd1; }
+.paper-score-table .category-cell { background: #fffaf0; font-weight: 650; }
+.paper-score-table .player-head {
+  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.paper-score-table .score-cell,
+.paper-score-table .summary-cell,
+.paper-score-table .grand-cell {
+  width: 48px;
+  min-width: 48px;
+  max-width: 48px;
+  padding: 0;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 700;
+  position: relative;
+}
+.paper-score-table .current-player-column { background: rgba(191,166,112,.11); }
+.paper-score-table thead .current-player-column { background: #e5dccb; box-shadow: inset 0 -2px 0 rgba(137,108,58,.30); }
+.paper-score-table .summary-cell.current-player-column,
+.paper-score-table .grand-cell.current-player-column { background: #ece4d6; }
+.paper-section-row th {
+  height: 28px;
+  padding-left: 8px;
+  background: #e6ddce;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: .86rem;
+  letter-spacing: .015em;
+  text-align: left;
+  border-bottom: 1px solid rgba(88,77,62,.45);
+}
+.paper-score-entry {
+  width: 100%;
+  height: 100%;
+  min-height: 34px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.paper-score-entry:active { background: rgba(38,50,43,.06); }
+.paper-written-score {
+  position: relative;
+  width: 100%;
+  min-height: 34px;
+  display: grid;
+  place-items: center;
+  font-size: 1rem;
+}
+.paper-written-score.struck { overflow: hidden; color: transparent; }
+.paper-written-score.struck::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 49px;
+  height: 1.6px;
+  background: rgba(39,51,45,.48);
+  transform: translate(-50%,-50%) rotate(-30deg);
+}
+.score-cell.last-submit-cell {
+  background: rgba(210,181,118,.20);
+  box-shadow: inset 0 0 0 1.5px rgba(137,108,58,.24);
+}
+.paper-summary-row .category-cell,
+.paper-summary-row .summary-cell {
+  height: 38px;
+  background: #f2ecdf;
+  font-size: .74rem;
+}
+.paper-summary-row.strong .category-cell,
+.paper-summary-row.strong .summary-cell { font-weight: 850; border-top: 1px solid rgba(88,77,62,.40); }
+.paper-summary-row .bonus-earned {
+  font-weight: 900;
+  background: #eee6d7;
+}
+.paper-grand-total .category-cell,
+.paper-grand-total .grand-cell {
+  height: 43px;
+  background: #e8e0d2;
+  border-top: 1.5px solid #544d43;
+  font-weight: 900;
+}
+.paper-grand-total .grand-cell { font-size: 1.08rem; }
+.paper-summary-row .summary-cell.current-player-column { background: #e9e0cf; }
+.paper-grand-total .grand-cell.current-player-column { background: #ded4c2; }
+.paper-sheet-hint {
+  margin: 9px 4px 3px;
+  color: var(--muted);
+  text-align: center;
+  font-size: .69rem;
+  line-height: 1.35;
+}
+@media (max-width: 365px) {
+  .paper-drawer-body { padding-left: 8px; padding-right: 8px; }
+  .paper-score-table { font-size: .74rem; }
+  .paper-score-table .category-head,
+  .paper-score-table .category-cell { width: 72px; min-width: 72px; max-width: 72px; }
+  .paper-score-table .player-head,
+  .paper-score-table .score-cell,
+  .paper-score-table .summary-cell,
+  .paper-score-table .grand-cell { width: 46px; min-width: 46px; max-width: 46px; }
+}
+
+/* In submit mode the whole category row is a tap target for the current player. */
+.selectable-score-row { cursor: pointer; }
+.selectable-score-row:active > * { background-color: rgba(25, 50, 41, .045); }
+
+/* Continue the paper score grid after the last real player instead of leaving dead space. */
+.paper-score-table {
+  min-width: 100%;
+}
+.paper-score-table .paper-grid-filler {
+  width: auto;
+  min-width: 0;
+  padding: 0;
+  border-right: 0;
+  background-color: #fffaf0;
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent 47px,
+    rgba(88,77,62,.24) 47px,
+    rgba(88,77,62,.24) 48px
+  );
+}
+.paper-score-table .paper-grid-filler-head {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background-color: #eee7d9;
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent 0,
+    transparent 47px,
+    rgba(88,77,62,.24) 47px,
+    rgba(88,77,62,.24) 48px
+  );
+}
+.paper-score-table tfoot .paper-grid-filler {
+  background-color: #e9e0d2;
+}
