@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -23,85 +23,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-
-      - name: Mirror canonical direct app
-        shell: bash
-        run: |
-          set -euo pipefail
-          BASE='https://kniffel-mobile.vercel.app'
-          mkdir -p icons
-          for file in index.html manifest.webmanifest sw.js \
-            app-0.js app-1.js app-2.js app-3.js app-4.js \
-            styles-0.css styles-1.css styles-2.css styles-3.css styles-4.css; do
-            curl --fail --location --retry 3 "$BASE/$file" -o "$file"
-          done
-          curl --fail --location --retry 3 "$BASE/icons/icon.svg" -o icons/icon.svg
-          curl --fail --location --retry 3 "$BASE/icons/icon-maskable.svg" -o icons/icon-maskable.svg
-          touch .nojekyll
-
-      - name: Prepare PWA metadata for GitHub Pages
-        shell: python
-        run: |
-          import json
-          from pathlib import Path
-
-          index = Path('index.html')
-          text = index.read_text()
-          text = text.replace(
-              '<link rel="icon" href="icons/icon.svg" type="image/svg+xml" />',
-              '<link rel="icon" href="icons/icon-192.png" type="image/png" sizes="192x192" />'
-          )
-          text = text.replace(
-              '<link rel="apple-touch-icon" href="icons/icon.svg" />',
-              '<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />'
-          )
-          index.write_text(text)
-
-          manifest_path = Path('manifest.webmanifest')
-          manifest = json.loads(manifest_path.read_text())
-          manifest['icons'] = [
-              {'src':'icons/icon-192.png','sizes':'192x192','type':'image/png','purpose':'any'},
-              {'src':'icons/icon-512.png','sizes':'512x512','type':'image/png','purpose':'any'},
-              {'src':'icons/icon-maskable-512.png','sizes':'512x512','type':'image/png','purpose':'maskable'},
-          ]
-          manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n')
-
-          sw_path = Path('sw.js')
-          sw = sw_path.read_text()
-          sw = sw.replace('kniffel-shell-v3', 'kniffel-shell-gh-v1')
-          sw = sw.replace('kniffel-shell-v4', 'kniffel-shell-gh-v1')
-          sw = sw.replace(
-              '"./icons/icon.svg","./icons/icon-maskable.svg"',
-              '"./icons/icon-192.png","./icons/icon-512.png","./icons/icon-maskable-512.png","./icons/apple-touch-icon.png"'
-          )
-          sw_path.write_text(sw)
-
-      - name: Generate install icons
-        run: |
-          npm install --no-save --package-lock=false sharp@0.34.5
-          node --input-type=module <<'NODE'
-          import sharp from 'sharp';
-          await sharp('icons/icon.svg').resize(192,192).png().toFile('icons/icon-192.png');
-          await sharp('icons/icon.svg').resize(512,512).png().toFile('icons/icon-512.png');
-          await sharp('icons/icon-maskable.svg').resize(512,512).png().toFile('icons/icon-maskable-512.png');
-          await sharp('icons/icon.svg').resize(180,180).png().toFile('icons/apple-touch-icon.png');
-          NODE
-
-      - name: Store mirrored app in repository
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add .nojekyll index.html manifest.webmanifest sw.js \
-            app-0.js app-1.js app-2.js app-3.js app-4.js \
-            styles-0.css styles-1.css styles-2.css styles-3.css styles-4.css \
-            icons/icon.svg icons/icon-maskable.svg icons/icon-192.png icons/icon-512.png \
-            icons/icon-maskable-512.png icons/apple-touch-icon.png
-          if ! git diff --cached --quiet; then
-            git commit -m 'Mirror Kniffel PWA for GitHub Pages'
-            git push
-          fi
 
       - name: Assemble Pages artifact
         shell: bash
